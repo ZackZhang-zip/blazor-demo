@@ -1,0 +1,77 @@
+@page "/handler"
+@using System.IO;
+@using NPOI;
+@using NPOI.XSSF.UserModel;
+@using NPOI.SS.UserModel;
+@using blazor_demo.Data;
+@using blazor_demo.Utils;
+
+<h1>数据处理</h1>
+
+<InputFile OnChange="@LoadFiles" />
+
+@code{
+    private async Task LoadFiles(InputFileChangeEventArgs e)
+    {
+        string filename = Path.GetFileName(e.File.Name);
+        string ext = Path.GetExtension(e.File.Name);
+
+        if(ext != ".xlsx")
+        {
+            throw new FileLoadException("文件不是xlsx");
+        }
+
+        // read excel
+        MemoryStream ms = new MemoryStream();
+        await e.File.OpenReadStream().CopyToAsync(ms);
+        ms.Position = 0;
+        XSSFWorkbook xssWorkbook = new XSSFWorkbook(ms);
+
+        // analyze the sheet
+        var sheet = xssWorkbook.GetSheetAt(0);
+        var headerRow = sheet.GetRow(0);
+        int cellCount = headerRow.LastCellNum;
+        for (int i = (sheet.FirstRowNum + 1); i <= sheet.LastRowNum; i++)
+        {
+            var row = sheet.GetRow(i);
+            if (row == null) continue;
+            if (row.Cells.All(d => d.CellType == CellType.Blank)) continue;
+            // read cell values
+            PropertyData d = new PropertyData();
+            d.Id = row.GetCellValue(0);
+            d.City = row.GetCellValue(1);
+            d.County = row.GetCellValue(2);
+            d.PropertyName = row.GetCellValue(3);
+            d.CorrectedName = row.GetCellValue(4);
+            d.BizDistrict = row.GetCellValue(5);
+            d.Address = row.GetCellValue(6);
+            d.LngLat = row.GetCellValue(7);
+            d.POIId = row.GetCellValue(8);
+            d.POICity = row.GetCellValue(9);
+            d.POICounty = row.GetCellValue(10);
+            d.POIName = row.GetCellValue(11);
+            d.POIAddress = row.GetCellValue(12);
+            d.POIBizDistrict = row.GetCellValue(13);
+            d.POIType = row.GetCellValue(14);
+            d.POIXY = row.GetCellValue(15);
+            d.Distance = row.GetCellValue(16);
+            d.RecommandText = row.GetCellValue(17);
+            d.Remarks = row.GetCellValue(18);
+            d.ConfirmedName = row.GetCellValue(19);
+
+            // fill out amap data
+            d.AmapPropertyHandler();
+
+            // set row data
+            row.SetCellValue(11, d.POIName);
+            row.SetCellValue(15, d.POIXY);
+            row.SetCellValue(16, d.Distance);
+        }
+
+        // save file
+        using FileStream fs = new FileStream($@"D:\dotnet-projects\blazor-demo\TestFiles\{filename}-{DateTime.Now.Ticks.ToString()}.xlsx", FileMode.CreateNew);
+        xssWorkbook.Write(fs);
+        xssWorkbook.Close();
+    }
+
+}
