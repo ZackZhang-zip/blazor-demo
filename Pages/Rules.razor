@@ -1,0 +1,146 @@
+@page "/rules"
+ 
+<h1>数据处理流程</h1>
+ 
+<p>此工具用于JLL内部数据清洗，并遵循下述描述规则执行，有问题请联系<a href=mailto:zack.zhang@ap.jll.com>zack.zhang@ap.jll.com</a></p>
+ 
+<p>贝壳：</p>
+<ul class="rule-list">
+    <li>
+        1）提供数据
+        <ul>
+            <li>1.1) 获得爬虫数据</li>
+            <li>1.2) 根据指定模板的结构（确认的列名）将爬虫数据装填进去，默认第一次数据初始化 status = -1</li>
+        </ul>
+    </li>
+    <li>
+        2）第一次程序处理数据
+        <ul>
+            <li>2.1）读取模板数据</li>
+            <li>2.2）装填高德数据（POIId, POIType, POIAddress, POILocation, Adcode），计算坐标距离</li>
+            <li>2.3）返回结果</li>
+        </ul>
+    </li>
+    <li>
+        3）根据第一次程序处理结果，清洗数据，需要修改的数据填写 RecommendText & Remarks
+        <ul>
+            <li>3.1) 需要修正的数据 填写Recommend & Remarks , Status = -2</li>
+            <li>3.2）需要删除的数据，Status = -3</li>
+            <li>3.3）灰色的数据（即重复的数据），填写Confirmed name，confirmed name是正确的原数据楼名 （即贝壳原名），Status = -5</li>
+        </ul>
+    </li>
+    <li>
+        4）第二次程序处理数据
+        <ul>
+            <li>4.1）根据 RecommendText & Remarks 修正数据 （Status = -2）=》（Status = 2）</li>
+            <li>4.2）删除红色数据 （Status = -3）=》(Status = 3)</li>
+            <li>
+                4.3）处理灰色数据 （Status = -5）=》（Status = 5）
+                <ul>
+                    <li>4.3.1）重复的数据，根据ConfirmedName合并成1条数据 （即只保留confirmed name同名的楼）</li>
+                </ul>
+            </li>
+            <li>4.4）返回结果</li>
+        </ul>
+    </li>
+    <li>
+        5）确认第二次程序处理结果
+    </li>
+    <li>
+        6）第三次程序上传数据（入库）
+    </li>
+</ul>
+ 
+ 
+ 
+<p>三房：</p>
+<ul class="rule-list">
+    <li>
+        1）提供数据
+        <ul>
+            <li>1.1) 获得爬虫数据</li>
+            <li>1.2) 根据指定模板的结构（确认的列名）将爬虫数据装填进去，默认第一次数据初始化 status = -1</li>
+        </ul>
+    </li>
+    <li>
+        2）第一次程序处理数据
+        <ul>
+            <li>2.1）读取模板数据</li>
+            <li>2.2）装填高德数据（POIId, POIType, POIAddress, POILocation, Adcode），计算坐标距离</li>
+            <li>2.3）返回结果</li>
+        </ul>
+    </li>
+    <li>
+        3）根据第一次程序处理结果，清洗数据，需要修改的数据填写 RecommendText & Remarks
+        <ul>
+            <li>3.1) 需要修正的数据 填写Recommend & Remarks , Status = -2</li>
+            <li>3.2）需要删除的数据，Status = -3</li>
+            <li>3.3）灰色的数据（即重复的数据），填写Confirmed name，confirmed name是正确的原数据楼名 （即三房原名），Status = -5</li>
+        </ul>
+    </li>
+    <li>
+        4）第二次程序处理数据
+        <ul>
+            <li>4.1）根据 RecommendText & Remarks 修正数据 （Status = -2）=》（Status = 2）</li>
+            <li>4.2）删除红色数据 （Status = -3）=》(Status = 3)</li>
+            <li>
+                4.3）处理灰色数据 （Status = -5）=》（Status = 5）
+                <ul>
+                    <li>4.3.1）重复的数据，根据ConfirmedName合并成1条数据 （即只保留confirmed name同名的楼）</li>
+                </ul>
+            </li>
+            <li>4.4）返回结果</li>
+        </ul>
+    </li>
+    <li>
+        5）确认第二次程序处理结果
+    </li>
+    <li>
+        6）第三次程序上传数据（入库）
+    </li>
+</ul>
+ 
+ 
+<p>点评：</p>
+<ul class="rule-list">
+    <li>
+        1）根据模板提供原始数据
+        <ul>
+            <li>1.1) 获得爬虫数据</li>
+            <li>1.2）预先删除不符合要求的商业体数据 （比如去除 小卖铺，便利店 超市）</li>
+            <li>1.3）有错误名称的修复名字 （会多一列额外的修复后的名称 CorrectedName）</li>
+            <li>1.4）去除重复的商业体</li>
+            <li>1.5）标记优质商业体 (IsPrior = 1)</li>
+            <li>1.6) 根据指定模板的结构（确认的列名）将爬虫数据装填进去，默认第一次数据初始化 status = -1</li>
+        </ul>
+    </li>
+    <li>
+        2）第一次程序处理数据
+        <ul>
+            <li>2.1）读取模板数据</li>
+            <li>2.2）装填高德数据（POIId, POIType, POIAddress, POILocation, Adcode），计算坐标距离</li>
+            <li>2.3）返回结果</li>
+        </ul>
+    </li>
+    <li>
+        3）根据第一次程序处理结果，清洗数据，需要修改的数据填写 RecommendText & Remarks
+        <ul>
+            <li>3.1)  需要修正的数据 填写Recommend & Remarks , Status = -2</li>
+        </ul>
+    </li>
+    <li>
+        4）第二次程序处理数据
+        <ul>
+            <li>4.1）根据 RecommendText & Remarks 修正数据 （Status = -2）=》（Status = 2）</li>
+            <li>4.2）返回结果</li>
+        </ul>
+    </li>
+    <li>
+        5）确认第二次程序处理结果
+    </li>
+    <li>
+        6）第三次程序上传数据（入库）
+    </li>
+</ul>
+ 
+ 

@@ -8,14 +8,15 @@ namespace blazor_demo.Utils
     {
         public static string GetCellValue(this IRow row, int index)
         {
-            return row.GetCell(index)?.ToString() ?? string.Empty;
+            return row.GetCell(index)?.ToString().Trim() ?? string.Empty;
         }
 
         public static void SetCellValue(this IRow row, int index, string value)
         {
+            if(value == null) value = string.Empty;
             ICell cell = row.GetCell(index);
             if(cell == null) cell = row.CreateCell(index);
-            cell.SetCellValue(value);
+            cell.SetCellValue(value.Trim());
         }
     }
 }

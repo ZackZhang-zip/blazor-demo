@@ -24,5 +24,8 @@ namespace blazor_demo.Data
         public string RecommandText { get; set; }
         public string Remarks { get; set; }
         public string ConfirmedName { get; set; }
+        public string Adcode { get; set; }
+        public string Status { get; set; }
+        public string IsPrior { get; set; }
     }
 }

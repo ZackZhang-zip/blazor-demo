@@ -10,7 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using blazor_demo.Data;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
+using blazor_demo.MapApiHandler;
+
 
 namespace blazor_demo
 {
@@ -27,9 +28,11 @@ namespace blazor_demo
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IMapApiHandler>(new AMapApiHandler());
+
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
+            services.AddHttpClient();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

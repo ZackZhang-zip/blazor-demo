@@ -1,10 +1,14 @@
 @page "/handler"
 @using System.IO;
+@using System.Reflection;
 @using NPOI;
 @using NPOI.XSSF.UserModel;
 @using NPOI.SS.UserModel;
 @using blazor_demo.Data;
 @using blazor_demo.Utils;
+@using blazor_demo.MapApiHandler;
+
+@inject IMapApiHandler mapApiHandler;
 
 <h1>数据处理</h1>
 
@@ -58,18 +62,39 @@
             d.RecommandText = row.GetCellValue(17);
             d.Remarks = row.GetCellValue(18);
             d.ConfirmedName = row.GetCellValue(19);
+            d.Adcode = row.GetCellValue(20);
+            d.Status = row.GetCellValue(21);
+            d.IsPrior = row.GetCellValue(22);
 
-            // fill out amap data
-            d.AmapPropertyHandler();
+            int status = Convert.ToInt32(d.Status);
+            if(status < 0) 
+            {
+                // fill out amap data
+                d.PropertyApiHandle(mapApiHandler);
 
-            // set row data
-            row.SetCellValue(11, d.POIName);
-            row.SetCellValue(15, d.POIXY);
-            row.SetCellValue(16, d.Distance);
+                // set row data
+                row.SetCellValue(7, d.LngLat);
+                row.SetCellValue(8, d.POIId);
+                row.SetCellValue(9, d.POICity);
+                row.SetCellValue(10, d.POICounty);
+                row.SetCellValue(11, d.POIName);
+                row.SetCellValue(12, d.POIAddress);
+                row.SetCellValue(13, d.POIBizDistrict);
+                row.SetCellValue(14, d.POIType);
+                row.SetCellValue(15, d.POIXY);
+                row.SetCellValue(16, d.Distance);
+                row.SetCellValue(20, d.Adcode);
+
+                // update status
+                row.SetCellValue(21, (status * -1).ToString());
+            }
         }
 
         // save file
-        using FileStream fs = new FileStream($@"D:\dotnet-projects\blazor-demo\TestFiles\{filename}-{DateTime.Now.Ticks.ToString()}.xlsx", FileMode.CreateNew);
+        string folder = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "output");
+        if(!Directory.Exists(folder)) Directory.CreateDirectory(folder);
+
+        using FileStream fs = new FileStream(Path.Combine(folder, $"{filename}-{DateTime.Now.Ticks.ToString()}.xlsx"), FileMode.CreateNew);
         xssWorkbook.Write(fs);
         xssWorkbook.Close();
     }
