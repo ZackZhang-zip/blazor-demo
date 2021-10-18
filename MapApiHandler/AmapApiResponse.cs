@@ -14,14 +14,14 @@ namespace blazor_demo.MapApiHandler
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public string Address { get; set; }
+        public object Address { get; set; }
         public string Location { get; set; }
         public string TypeCode { get; set; }
         [JsonProperty("business_area")]
-        public string BizDistrict { get; set; }
-        public string CityName { get; set; }
-        public string AdName { get; set; }
-        public string Adcode { get; set; }
+        public object BizDistrict { get; set; }
+        public object CityName { get; set; }
+        public object AdName { get; set; }
+        public object Adcode { get; set; }
     }
 
     class AmapAddressDecodeResponse

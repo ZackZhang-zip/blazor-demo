@@ -66,6 +66,7 @@
             d.Status = row.GetCellValue(21);
             d.IsPrior = row.GetCellValue(22);
 
+            // only -1, -2 needs to be proceeded
             int status = Convert.ToInt32(d.Status);
             if(status < 0) 
             {
