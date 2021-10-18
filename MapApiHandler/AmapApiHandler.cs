@@ -74,7 +74,7 @@ namespace blazor_demo.MapApiHandler
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"PoiSearch: the office[{d.PropertyName}] cannot be resolved");
+                Console.WriteLine($"PoiSearch: the office[{d.PropertyName}] cannot be resolved, Error: {ex.Message}");
             }
         }
 
@@ -94,7 +94,7 @@ namespace blazor_demo.MapApiHandler
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"AddressDecode: the address of the office[{d.PropertyName}] cannot be decoded");
+                Console.WriteLine($"AddressDecode: the address of the office[{d.PropertyName}] cannot be decoded, Error: {ex.Message}");
             }
         }
     }
