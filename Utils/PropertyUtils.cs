@@ -15,14 +15,23 @@ namespace blazor_demo.Utils
 
         public static void CalculateDistance(this PropertyData d)
         {
-            if(!string.IsNullOrEmpty(d.LngLat) && !string.IsNullOrEmpty(d.POIXY))
+            try
             {
-                Point p1 = GeoUtils.CreatePoint(d.LngLat);
-                Point p2 = GeoUtils.CreatePoint(d.POIXY);
+                if(!string.IsNullOrEmpty(d.LngLat) && !string.IsNullOrEmpty(d.POIXY))
+                {
+                    Point p1 = GeoUtils.CreatePoint(d.LngLat);
+                    Point p2 = GeoUtils.CreatePoint(d.POIXY);
 
-                d.Distance = p1.Distance(p2).ToString();
+                    d.Distance = (p1.Distance(p2) * 1000).ToString();
+                }
+                else d.Distance = string.Empty;
             }
-            else d.Distance = string.Empty;
+            catch(Exception ex)
+            {
+                d.Distance = string.Empty;
+                Console.WriteLine($"Error ({d.PropertyName}): {ex.Message}");
+            }
+            
         }
     }
 }

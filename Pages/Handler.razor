@@ -120,5 +120,7 @@
         using FileStream fs = new FileStream(Path.Combine(folder, $"{filename}-{DateTime.Now.Ticks.ToString()}.xlsx"), FileMode.CreateNew);
         xssWorkbook.Write(fs);
         xssWorkbook.Close();
+
+        Console.WriteLine("Everything is done...");
     }
 }

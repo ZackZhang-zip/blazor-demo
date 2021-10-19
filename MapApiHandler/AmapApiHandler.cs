@@ -10,7 +10,7 @@ namespace blazor_demo.MapApiHandler
     {
         public HttpClient Client{ get; set; } = new HttpClient();
         private string apikey = "e95b5b479b5bb71f8511d6102fe06ee5";
-        private string tmplPoiApiUrl = "https://restapi.amap.com/v3/place/text?key={0}&city={1}&keywords={2}&children=1&offset=5&page=1&extensions=base&types={3}";
+        private string tmplPoiApiUrl = "https://restapi.amap.com/v3/place/text?key={0}&city={1}&keywords={2}&children=1&offset=5&page=1&extensions=all&types={3}";
         private string tmplAddressDecodeApiUrl = "https://restapi.amap.com/v3/geocode/geo?key={0}&city={1}&address={2}";
 
         public void Process(PropertyData d)
