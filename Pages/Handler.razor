@@ -12,13 +12,35 @@
 
 <h1>数据处理</h1>
 
-<InputFile OnChange="@LoadFiles" />
+<EditForm Model="@formModel" OnSubmit="@HandleSumbit">
+    <InputFile id="excelfile" OnChange="@LoadFiles" />
+    <div>
+        <button type="submit">处理数据</button> <button>上传数据</button>
+    </div>
+</EditForm>
+
 
 @code{
+    private UploadFileForm formModel = new();
+    IBrowserFile selectedFile = null;
+
+    private async Task HandleSumbit()
+    {
+        await UploadedFileProceed(selectedFile);
+    }
+
     private async Task LoadFiles(InputFileChangeEventArgs e)
     {
-        string filename = Path.GetFileName(e.File.Name);
-        string ext = Path.GetExtension(e.File.Name);
+        if(e.FileCount > 0) 
+            selectedFile = e.File;
+        else 
+            selectedFile = null;
+    }
+
+    private async Task UploadedFileProceed(IBrowserFile file)
+    {
+        string filename = Path.GetFileName(file.Name);
+        string ext = Path.GetExtension(file.Name);
 
         if(ext != ".xlsx")
         {
@@ -27,7 +49,7 @@
 
         // read excel
         MemoryStream ms = new MemoryStream();
-        await e.File.OpenReadStream().CopyToAsync(ms);
+        await file.OpenReadStream().CopyToAsync(ms);
         ms.Position = 0;
         XSSFWorkbook xssWorkbook = new XSSFWorkbook(ms);
 
@@ -99,5 +121,4 @@
         xssWorkbook.Write(fs);
         xssWorkbook.Close();
     }
-
 }
