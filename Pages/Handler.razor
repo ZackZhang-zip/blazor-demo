@@ -49,7 +49,7 @@
 
         // read excel
         MemoryStream ms = new MemoryStream();
-        await file.OpenReadStream().CopyToAsync(ms);
+        await file.OpenReadStream(10*1024*1024).CopyToAsync(ms);
         ms.Position = 0;
         XSSFWorkbook xssWorkbook = new XSSFWorkbook(ms);
 
